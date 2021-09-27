@@ -8,10 +8,20 @@ import './PlaceItem.css'
 
 const PlaceItem = (props) => {
     const [showMap, setShowMap] = useState(false)
+    const [showConfirmModal, setShowConfirmModal] = useState(false)
 
     const openMapHandler = () => setShowMap(true)
 
     const closeMapHandler = () => setShowMap(false)
+
+    const showDeleteWarningHandler = () => setShowConfirmModal(true)
+
+    const cancelDeleteWarningHandler = () => setShowConfirmModal(false)
+
+    const confirmDeleteHandler = () => {
+        setShowConfirmModal(false)
+        console.log('Deleting...')
+    }
 
     return (
         <React.Fragment>
@@ -26,6 +36,27 @@ const PlaceItem = (props) => {
                 <div className="map-container">
                     <Map center={props.coordinates} zoom={16} />
                 </div>
+            </Modal>
+
+            <Modal
+                show={showConfirmModal}
+                header="Are you sure?"
+                footerClass="place-item__modal-actions"
+                footer={
+                    <>
+                        <Button inverse onClick={cancelDeleteWarningHandler}>
+                            CANCEL
+                        </Button>
+                        <Button delete onClick={confirmDeleteHandler}>
+                            DELETE
+                        </Button>
+                    </>
+                }
+            >
+                <p>
+                    Do you want to proceed and delete this place? Please note
+                    that it cannot be undone thereafter.
+                </p>
             </Modal>
 
             <li className="place-item">
@@ -45,7 +76,9 @@ const PlaceItem = (props) => {
                             VIEW ON MAP
                         </Button>
                         <Button to={`/places/${props.id}`}>EDIT</Button>
-                        <Button danger>DELETE</Button>
+                        <Button danger onClick={showDeleteWarningHandler}>
+                            DELETE
+                        </Button>
                     </div>
                 </Card>
             </li>
