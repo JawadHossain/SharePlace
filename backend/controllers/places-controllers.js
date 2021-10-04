@@ -29,7 +29,7 @@ const getPlaceById = async (req, res, next) => {
         return next(error)
     }
 
-    res.json({ place: place.toObject({ getters: true }) }) // => { place } => { place: place }
+    res.json({ place: place.toObject({ getters: true }) })
 }
 
 // retrieve places by user id
@@ -89,7 +89,6 @@ const createPlace = async (req, res, next) => {
 
     try {
         await createdPlace.save()
-        res.status(201).json({ place: createdPlace })
     } catch (err) {
         const error = new HttpError(
             'Creating place failed, plese try again',
@@ -97,15 +96,16 @@ const createPlace = async (req, res, next) => {
         )
         return next(error)
     }
+
+    res.status(201).json({ place: createdPlace })
 }
 
 // update a place
 const updatePlace = async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-        throw new HttpError(
-            'Invalid inputs passed, please check your data',
-            422
+        return next(
+            new HttpError('Invalid inputs passed, please check your data', 422)
         )
     }
 
