@@ -1,5 +1,4 @@
 const { validationResult } = require('express-validator')
-const { v4: uuid } = require('uuid')
 
 const HttpError = require('../models/http-error')
 const User = require('../models/user')
@@ -29,7 +28,7 @@ const signup = async (req, res, next) => {
         )
     }
 
-    const { name, email, password, places } = req.body
+    const { name, email, password } = req.body
 
     // check if email exists
     let existingUser
@@ -50,7 +49,7 @@ const signup = async (req, res, next) => {
         email,
         image: 'https://media-exp1.licdn.com/dms/image/C5603AQGpDsnURi2Ldg/profile-displayphoto-shrink_800_800/0/1620231306558?e=1639008000&v=beta&t=pEaZn1lr3nwlg82muOZABBU2cvsMcohcDIQ0d1RLDCE',
         password,
-        places
+        places: []
     })
 
     try {
