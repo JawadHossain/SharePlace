@@ -1,17 +1,38 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+
+import ErrorModal from '../../shared/components/UIElements/ErrorModal/ErrorModal'
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner/LoadingSpinner'
 import UsersList from '../components/UsersList'
+import { useHttpClient } from '../../shared/hooks/http-hook'
 
 const Users = () => {
-    const USERS = [
-        {
-            id: 'u1',
-            name: 'Jawad Hossain',
-            image: 'https://images.unsplash.com/photo-1631466266525-53e979c9e29b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1051&q=80',
-            places: 3
-        }
-    ]
+    const { isLoading, error, sendRequest, clearError } = useHttpClient()
+    const [loadedUsers, setLoadedUsers] = useState()
 
-    return <UsersList items={USERS} />
+    useEffect(() => {
+        // useEffect doesn't recommend using async fuction, hence this
+        const fetchUsers = async () => {
+            try {
+                const responseData = await sendRequest(
+                    'http://localhost:5000/api/users'
+                )
+                setLoadedUsers(responseData.users)
+            } catch (err) {}
+        }
+        fetchUsers()
+    }, [sendRequest])
+
+    return (
+        <React.Fragment>
+            <ErrorModal error={error} onClear={clearError} />
+            {isLoading && (
+                <div className="center">
+                    <LoadingSpinner asOverlay />
+                </div>
+            )}
+            {!isLoading && loadedUsers && <UsersList items={loadedUsers} />}
+        </React.Fragment>
+    )
 }
 
 export default Users

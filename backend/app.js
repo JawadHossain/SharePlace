@@ -13,7 +13,12 @@ const app = express()
 app.use(bodyParser.json())
 
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*')
+    const allowedOrigins = ['http://localhost:3000']
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin)
+    }
+
     res.setHeader(
         'Access-Control-Allow-Headers',
         'Origin, X-Requested-With, Content-Type, Accept, Authorization'
@@ -45,7 +50,7 @@ app.use((error, req, res, next) => {
 
 mongoose
     .connect(
-        `mongodb+srv://jhossain:${process.env.MONGODB_PASSWORD}@cluster0.4rpp0.mongodb.net/places?retryWrites=true&w=majority`
+        `mongodb+srv://jhossain:${process.env.MONGODB_PASSWORD}@cluster0.4rpp0.mongodb.net/mern?retryWrites=true&w=majority`
     )
     .then(() => {
         app.listen(5000, () => console.log('Listening on port 5000'))
