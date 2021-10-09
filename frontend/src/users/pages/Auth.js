@@ -17,6 +17,7 @@ import {
 } from '../../shared/util/validators'
 
 import './Auth.css'
+import ImageUpload from '../../shared/components/FormElements/ImageUpload'
 
 const Auth = () => {
     const auth = useContext(AuthContext)
@@ -59,19 +60,16 @@ const Auth = () => {
         } else {
             // sign up
             try {
+                const formData = new FormData()
+                formData.append('name', formState.inputs.name.value)
+                formData.append('email', formState.inputs.email.value)
+                formData.append('password', formState.inputs.password.value)
+                formData.append('image', formState.inputs.image.value)
+
                 const responseData = await sendRequest(
                     'http://localhost:5000/api/users/signup',
                     'POST',
-                    JSON.stringify(
-                        {
-                            name: formState.inputs.email.value,
-                            email: formState.inputs.email.value,
-                            password: formState.inputs.password.value
-                        },
-                        {
-                            'Content-Type': 'application/json'
-                        }
-                    )
+                    formData // fetch api adds Content-type header automatically for form-data
                 )
 
                 auth.login(responseData.user.id)
@@ -85,7 +83,8 @@ const Auth = () => {
             setFormData(
                 {
                     ...formState.inputs,
-                    name: undefined
+                    name: undefined,
+                    image: undefined
                 },
                 formState.inputs.email.isValid &&
                     formState.inputs.password.isValid
@@ -97,6 +96,10 @@ const Auth = () => {
                     ...formState.inputs,
                     name: {
                         value: '',
+                        isValid: false
+                    },
+                    image: {
+                        value: null,
                         isValid: false
                     }
                 },
@@ -129,6 +132,15 @@ const Auth = () => {
                             validators={[VALIDATOR_REQUIRE()]}
                             errorText="Please enter a name."
                             onInput={inputHandler}
+                        />
+                    )}
+
+                    {!isLoginMode && (
+                        <ImageUpload
+                            id="image"
+                            center
+                            onInput={inputHandler}
+                            errorText="Please provide an image."
                         />
                     )}
 

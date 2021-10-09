@@ -50,7 +50,6 @@ const UpdatePlace = () => {
 
                 setLoadedPlace(responseData.place)
 
-                console.log(responseData)
                 setFormData(
                     {
                         title: {
@@ -77,18 +76,17 @@ const UpdatePlace = () => {
             await sendRequest(
                 `http://localhost:5000/api/places/${placeId}`,
                 'PATCH',
-                JSON.stringify(
-                    {
-                        tite: formState.inputs.title.value,
-                        description: formState.inputs.description.value
-                    },
-                    { 'Content-Type': 'application/json' }
-                )
+                JSON.stringify({
+                    title: formState.inputs.title.value,
+                    description: formState.inputs.description.value
+                }),
+                {
+                    'Content-Type': 'application/json'
+                }
             )
 
             history.push(`/${auth.userId}/places`)
         } catch (err) {}
-        console.log(formState.inputs)
     }
 
     if (isLoading) {

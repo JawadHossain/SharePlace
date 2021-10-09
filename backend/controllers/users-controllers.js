@@ -28,7 +28,7 @@ const signup = async (req, res, next) => {
         )
     }
 
-    const { name, email, password } = req.body
+    const { name, email, password, file } = req.body
 
     // check if email exists
     let existingUser
@@ -47,7 +47,7 @@ const signup = async (req, res, next) => {
     const createdUser = new User({
         name,
         email,
-        image: 'https://media-exp1.licdn.com/dms/image/C5603AQGpDsnURi2Ldg/profile-displayphoto-shrink_800_800/0/1620231306558?e=1639008000&v=beta&t=pEaZn1lr3nwlg82muOZABBU2cvsMcohcDIQ0d1RLDCE',
+        image: req.file.path,
         password,
         places: []
     })

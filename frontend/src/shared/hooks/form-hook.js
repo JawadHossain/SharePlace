@@ -43,7 +43,7 @@ export const useForm = (initialInputs, initialFormValidity) => {
         isValid: initialFormValidity
     })
 
-    // useCallback to prevent function recreaton on component re-render
+    // useCallback to prevent function recreation on component re-render
     const inputHandler = useCallback((id, value, isValid) => {
         dispatch({
             type: 'INPUT_CHANGE',

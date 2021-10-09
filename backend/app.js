@@ -1,3 +1,5 @@
+const fs = require('fs')
+const path = require('path')
 const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
@@ -12,9 +14,11 @@ const app = express()
 
 app.use(bodyParser.json())
 
+app.use('/uploads/images', express.static(path.join('uploads', 'images')))
+
 app.use((req, res, next) => {
     const allowedOrigins = ['http://localhost:3000']
-    const origin = req.headers.origin;
+    const origin = req.headers.origin
     if (allowedOrigins.includes(origin)) {
         res.setHeader('Access-Control-Allow-Origin', origin)
     }
@@ -39,6 +43,13 @@ app.use((req, res, next) => {
 
 // Error handling middleware. executed only if any middleware before it yields an error
 app.use((error, req, res, next) => {
+    // check and remove if multer added a req.file
+    if (req.file) {
+        fs.unlink(req.file.path, (err) => {
+            console.log(err)
+        })
+    }
+
     if (res.headerSent) {
         return next(error)
     }
