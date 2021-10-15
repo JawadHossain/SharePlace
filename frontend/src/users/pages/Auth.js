@@ -55,7 +55,9 @@ const Auth = () => {
                         'Content-Type': 'application/json'
                     }
                 )
-                auth.login(responseData.user.id)
+
+                // Store JWT token
+                auth.login(responseData.userId, responseData.token)
             } catch (err) {}
         } else {
             // sign up
@@ -72,7 +74,8 @@ const Auth = () => {
                     formData // fetch api adds Content-type header automatically for form-data
                 )
 
-                auth.login(responseData.user.id)
+                // Store JWT token
+                auth.login(responseData.userId, responseData.token)
             } catch (err) {}
         }
     }
@@ -113,15 +116,10 @@ const Auth = () => {
     return (
         <React.Fragment>
             <ErroModal error={error} onClear={clearError} />
-            {isLoading && (
-                <div className="center">
-                    <LoadingSpinner asOverlay />
-                </div>
-            )}
             <Card className="authentication">
+                {isLoading && <LoadingSpinner asOverlay />}
                 <h2>Login Required</h2>
                 <hr />
-
                 <form onSubmit={authSubmitHandler}>
                     {!isLoginMode && (
                         <Input
@@ -167,7 +165,6 @@ const Auth = () => {
                         {isLoginMode ? 'LOGIN' : 'SIGNUP'}
                     </Button>
                 </form>
-
                 <Button inverse onClick={switchModeHandler}>
                     SWITCH TO {isLoginMode ? 'SIGNUP' : 'LOGIN'}
                 </Button>

@@ -18,9 +18,7 @@ import './PlaceForm.css'
 
 const NewPlace = () => {
     const auth = useContext(AuthContext)
-
     const { isLoading, error, sendRequest, clearError } = useHttpClient()
-
     const [formState, inputHandler] = useForm(
         {
             title: {
@@ -52,18 +50,16 @@ const NewPlace = () => {
             formData.append('title', formState.inputs.title.value)
             formData.append('description', formState.inputs.description.value)
             formData.append('address', formState.inputs.address.value)
-            formData.append('creator', auth.userId)
             formData.append('image', formState.inputs.image.value)
-
             await sendRequest(
                 'http://localhost:5000/api/places',
                 'POST',
-                formData
+                formData,
+                {
+                    Authorization: 'Bearer ' + auth.token
+                }
             )
-
-            history.push(`/${auth.userId}/places`)
-
-            // Redirect user
+            history.push('/')
         } catch (err) {}
     }
 
@@ -84,8 +80,7 @@ const NewPlace = () => {
                 <Input
                     id="description"
                     element="textarea"
-                    type="text"
-                    label="Title"
+                    label="Description"
                     validators={[VALIDATOR_MINLENGTH(5)]}
                     errorText="Please enter a valid description (at least 5 characters)."
                     onInput={inputHandler}
@@ -93,13 +88,11 @@ const NewPlace = () => {
                 <Input
                     id="address"
                     element="input"
-                    type="text"
                     label="Address"
                     validators={[VALIDATOR_REQUIRE()]}
-                    errorText="Please enter a valid address (at least 5 characters)."
+                    errorText="Please enter a valid address."
                     onInput={inputHandler}
                 />
-
                 <ImageUpload
                     id="image"
                     onInput={inputHandler}
