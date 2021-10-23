@@ -3,6 +3,7 @@ const { check } = require('express-validator')
 
 const placesControllers = require('../controllers/places-controllers')
 const fileUpload = require('../middleware/file-upload')
+const checkAuth = require('../middleware/check-auth')
 
 const router = express.Router()
 
@@ -11,6 +12,9 @@ router.get('/:pid', placesControllers.getPlaceById)
 
 // retrieve places by user id
 router.get('/user/:uid', placesControllers.getPlacesByUserId)
+
+// middleware to check token for the next protected routes
+router.use(checkAuth)
 
 // create a new place
 router.post(
