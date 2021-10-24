@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import { useContext } from 'react/cjs/react.development'
 
 import Button from '../../shared/components/FormElements/Button'
 import Input from '../../shared/components/FormElements/Input'

@@ -101,6 +101,15 @@ const login = async (req, res, next) => {
         return next(error)
     }
 
+    // raise error if invalid username
+    if (!existingUser) {
+        const error = new HttpError(
+            'Invalid credentials, could not log you in.',
+            403
+        )
+        return next(error)
+    }
+
     // check password
     let isValidPassword = false
     try {
@@ -113,8 +122,8 @@ const login = async (req, res, next) => {
         return next(error)
     }
 
-    // raise error if invalid credentials
-    if (!existingUser || !isValidPassword) {
+    // raise error if invalid password
+    if (!isValidPassword) {
         const error = new HttpError(
             'Invalid credentials, could not log you in.',
             403
