@@ -15,7 +15,11 @@ app.use(bodyParser.json())
 app.use('/uploads/images', express.static(path.join('uploads', 'images')))
 
 app.use((req, res, next) => {
-    const allowedOrigins = ['http://localhost:3000']
+    const allowedOrigins = [
+        'http://localhost:3000',
+        'http://localhost:3000',
+        'https://shareplacemern.web.app/'
+    ]
     const origin = req.headers.origin
     if (allowedOrigins.includes(origin)) {
         res.setHeader('Access-Control-Allow-Origin', origin)
