@@ -8,8 +8,6 @@ const HttpError = require('./models/http-error')
 const placesRoutes = require('./routes/places-routes')
 const userRoutes = require('./routes/users-routes')
 
-require('dotenv').config()
-
 const app = express()
 
 app.use(bodyParser.json())
@@ -61,7 +59,7 @@ app.use((error, req, res, next) => {
 
 mongoose
     .connect(
-        `mongodb+srv://jhossain:${process.env.MONGODB_PASSWORD}@cluster0.4rpp0.mongodb.net/mern?retryWrites=true&w=majority`
+        `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.4rpp0.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
     )
     .then(() => {
         app.listen(5000, () => console.log('Listening on port 5000'))

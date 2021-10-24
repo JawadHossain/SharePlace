@@ -117,5 +117,7 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+nodemon.json
+
 package-lock.json
 uploads

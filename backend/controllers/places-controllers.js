@@ -17,7 +17,7 @@ const getPlaceById = async (req, res, next) => {
         place = await Place.findById(placeId)
     } catch (err) {
         const error = new HttpError(
-            'Something went wrong, couldn not find a place.',
+            'Something went wrong, could not find a place.',
             500
         )
         return next(error)
@@ -52,13 +52,13 @@ const getPlacesByUserId = async (req, res, next) => {
     }
 
     // if (!places || places.length === 0) {
-    // if (!userWithPlaces || userWithPlaces.places.length === 0) {
-    //     const error = new HttpError(
-    //         'Could not find a place with the provided user id.',
-    //         404
-    //     )
-    //     return next(error)
-    // }
+    if (!userWithPlaces || userWithPlaces.places.length === 0) {
+        const error = new HttpError(
+            'Could not find a place with the provided user id.',
+            404
+        )
+        return next(error)
+    }
 
     res.json({
         places: userWithPlaces.places.map((place) =>
